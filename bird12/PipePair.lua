@@ -21,7 +21,7 @@ function PipePair:init(y)
     self.x = VIRTUAL_WIDTH + 32
 
     -- y value is for the topmost pipe; gap is a vertical shift of the second lower pipe
-    self.y = math.random(9)
+    self.y = y
 
     -- instantiate two pipes that belong to this pair
     self.pipes = {
