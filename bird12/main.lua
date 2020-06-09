@@ -89,7 +89,7 @@ function love.load()
         ['score'] = love.audio.newSource('score.wav', 'static'),
 
         -- https://freesound.org/people/xsgianni/sounds/388079/
-        ['music'] = love.audio.newSource('marios_way.mp3', 'static')
+        ['music'] = love.audio.newSource('toby fox - UNDERTALE Soundtrack - 18 Uwa!! So Holiday♫.mp3', 'static')
     }
 
     -- kick off music
