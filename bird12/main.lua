@@ -161,13 +161,6 @@ function love.update(dt)
         backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
         groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
     end
-    
-    spawnTimer = spawnTimer + dt
-    
-    if spawnTimer > math.random(2,5) then
-        table.insert(pipes, Pipe())
-        spawnTimer = 0
-    end
 
     gStateMachine:update(dt)
 
