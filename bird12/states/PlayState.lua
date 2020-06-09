@@ -46,7 +46,7 @@ function PlayState:update(dt)
         table.insert(self.pipePairs, PipePair(y))
 
         -- reset timers
-        time.goal = math.random(2,5)
+        time.goal = math.random(2,50)
         self.timer = 0
     end
 
