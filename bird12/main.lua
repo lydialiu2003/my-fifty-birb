@@ -171,7 +171,7 @@ function love.update(dt)
 
     gStateMachine:update(dt)
     
-    for k, pipe in pairs(pipe) do
+    for k, pipe in pairs(pipes) do
         pipe:update(dt)
         
         if pipe.x < -pipe.width then
@@ -187,6 +187,11 @@ function love.draw()
     push:start()
     
     love.graphics.draw(background, -backgroundScroll, 0)
+    
+    for k, pipe in pairs(pipes) do
+        pipe:render()
+    end
+    
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
     
