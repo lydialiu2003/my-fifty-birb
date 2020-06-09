@@ -1,13 +1,10 @@
 --[[
     GD50 2018
     Flappy Bird Remake
-
     bird12
     "The Mouse Update"
-
     Author: Colton Ogden
     cogden@cs50.harvard.edu
-
     A mobile game by Dong Nguyen that went viral in 2013, utilizing a very simple 
     but effective gameplay mechanic of avoiding pipes indefinitely by just tapping 
     the screen, making the player's bird avatar flap its wings and move upwards slightly. 
@@ -64,8 +61,6 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 
-local spawnTimer = 0
-
 -- global variable we can use to scroll the map
 scrolling = true
 
@@ -94,7 +89,7 @@ function love.load()
         ['score'] = love.audio.newSource('score.wav', 'static'),
 
         -- https://freesound.org/people/xsgianni/sounds/388079/
-        ['music'] = love.audio.newSource('toby fox - UNDERTALE Soundtrack - 18 Uwa!! So Holiday♫.mp3', 'static')
+        ['music'] = love.audio.newSource('marios_way.mp3', 'static')
     }
 
     -- kick off music
@@ -161,24 +156,9 @@ function love.update(dt)
         backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
         groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
     end
-    
-    spawnTimer = spawnTimer + dt
-    
-    if spawnTimer > math.random(2,5) then
-        table.insert(pipe, Pipe())
-        spawnTimer = 0
-    end    
-    
+
     gStateMachine:update(dt)
-    
-    for k, pipe in pairs(pipe) do
-        pipe:update(dt)
-        
-        if pipe.x < -pipe.width then
-            table.remove(pipes, k)
-        end
-    end
-    
+
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
 end
