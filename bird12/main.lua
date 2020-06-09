@@ -171,7 +171,7 @@ function love.update(dt)
 
     gStateMachine:update(dt)
     
-    for k, pipe in pairs(pipes) do
+    for k, pipe in pair(pipe) do
         pipe:update(dt)
         
         if pipe.x < -pipe.width then
