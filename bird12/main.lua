@@ -165,13 +165,13 @@ function love.update(dt)
     spawnTimer = spawnTimer + dt
     
     if spawnTimer > math.random(2,5) then
-        table.insert(pipes, Pipe())
+        table.insert(pipe, Pipe())
         spawnTimer = 0
     end    
     
     gStateMachine:update(dt)
     
-    for k, pipe in pairs(pipes) do
+    for k, pipe in pairs(pipe) do
         pipe:update(dt)
         
         if pipe.x < -pipe.width then
