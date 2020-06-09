@@ -159,8 +159,21 @@ function love.update(dt)
         backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
         groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
     end
+    
+    spawnTimer = spawnTimer + dt
+    
+    if spawnTimer > math.random(2,5)
+        table.insert(pipes, Pipe())
+    end
 
     gStateMachine:update(dt)
+    
+    for k, pipe in pairs(pipes) do
+        pipe:update(dt)
+        
+        if pipe.x < -pipe.width then
+            table.remove(pipes, k)
+        end
 
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
@@ -173,5 +186,7 @@ function love.draw()
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
     
+    bird:render() 
+        
     push:finish()
 end
