@@ -177,6 +177,7 @@ function love.update(dt)
         if pipe.x < -pipe.width then
             table.remove(pipes, k)
         end
+    end
 
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
