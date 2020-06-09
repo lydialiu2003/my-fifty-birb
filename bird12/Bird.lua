@@ -2,7 +2,6 @@
     Bird Class
     Author: Colton Ogden
     cogden@cs50.harvard.edu
-
     The Bird is what we control in the game via clicking or the space bar; whenever we press either,
     the bird will flap and go up a little bit, where it will then be affected by gravity. If the bird hits
     the ground or a pipe, the game is over.
@@ -21,6 +20,8 @@ function Bird:init()
     self.height = self.image:getHeight()
 
     self.dy = 0
+
+    self.health = 100
 end
 
 --[[
@@ -44,12 +45,16 @@ end
 function Bird:update(dt)
     self.dy = self.dy + GRAVITY * dt
 
+    -- burst of anti-gravity when space or left mouse are pressed
     if love.keyboard.wasPressed('space') or love.mouse.wasPressed(1) then
         self.dy = -5
+        if self.y > 0 then
         sounds['jump']:play()
+        end
     end
 
-    self.y = self.y + self.dy
+    self.y = math.max(self.y + self.dy,0)
+    
 end
 
 function Bird:render()
