@@ -2,7 +2,6 @@
     PlayState Class
     Author: Colton Ogden
     cogden@cs50.harvard.edu
-
     The PlayState class is the bulk of the game, where the player actually controls the bird and
     avoids pipes. When the player collides with a pipe, we should go to the GameOver state, where
     we then go back to the main menu.
@@ -17,37 +16,47 @@ PIPE_HEIGHT = 288
 BIRD_WIDTH = 38
 BIRD_HEIGHT = 24
 
-local time.goal = 2
+extraTime = 0
+
 
 function PlayState:init()
-    self.bird = Bird()
-    self.pipePairs = {}
-    self.timer = 0
-    self.score = 0
+    
 
     -- initialize our last recorded Y value for a gap placement to base other gaps off of
     self.lastY = -PIPE_HEIGHT + math.random(80) + 20
+    self.lastX = 0
 end
 
 function PlayState:update(dt)
+    -- pause switch
+if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    gStateMachine:change('pause',{
+                            bird = self.bird,
+                            pipePairs = self.pipePairs,
+                            score = self.score,
+                            timer = self.timer
+                            })
+end
     -- update timer for pipe spawning
+    
     self.timer = self.timer + dt
-
     -- spawn a new pipe pair every second and a half
-    if self.timer > time.goal then
+    if self.timer > 2 + extraTime  then
         -- modify the last Y coordinate we placed so pipe gaps aren't too far apart
         -- no higher than 10 pixels below the top edge of the screen,
-        -- and no lower than a gap length (90 pixels) from the bottom
+        -- and no lower than a gap length (randomised) from the bottom
+        local gap = 110 + math.random(-30,30)
         local y = math.max(-PIPE_HEIGHT + 10, 
-            math.min(self.lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+            math.min(self.lastY + math.random(-20, 20)
+            , VIRTUAL_HEIGHT - gap - PIPE_HEIGHT))
         self.lastY = y
-
+       
         -- add a new pipe pair at the end of the screen at our new Y
-        table.insert(self.pipePairs, PipePair(y))
+        table.insert(self.pipePairs, PipePair(y,gap))
 
-        -- reset timers
-        time.goal = math.random(2,50)
+        -- reset timer
         self.timer = 0
+        extraTime = math.random()
     end
 
     -- for every pair of pipes..
@@ -80,12 +89,17 @@ function PlayState:update(dt)
     for k, pair in pairs(self.pipePairs) do
         for l, pipe in pairs(pair.pipes) do
             if self.bird:collides(pipe) then
+                if self.bird.health > 0 then 
+                sounds['hurt']:play()
+                self.bird.health = self.bird.health - 1
+                
+                elseif self.bird.health == 0 then 
                 sounds['explosion']:play()
                 sounds['hurt']:play()
-
                 gStateMachine:change('score', {
-                    score = self.score
+                   score = self.score
                 })
+               end   
             end
         end
     end
@@ -104,6 +118,7 @@ function PlayState:update(dt)
     end
 end
 
+previousX = 0
 function PlayState:render()
     for k, pair in pairs(self.pipePairs) do
         pair:render()
@@ -111,6 +126,8 @@ function PlayState:render()
 
     love.graphics.setFont(flappyFont)
     love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
+    love.graphics.print('HP: '..tostring(self.bird.health), 8, 40) 
+    
 
     self.bird:render()
 end
@@ -118,9 +135,14 @@ end
 --[[
     Called when this state is transitioned to from another state.
 ]]
-function PlayState:enter()
+function PlayState:enter(params)
     -- if we're coming from death, restart scrolling
     scrolling = true
+    love.audio.play(sounds['music'])
+    self.bird = params.bird
+    self.pipePairs = params.pipePairs
+    self.score = params.score
+    self.timer = params.timer
 end
 
 --[[
