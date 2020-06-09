@@ -67,6 +67,8 @@ local BACKGROUND_LOOPING_POINT = 413
 -- global variable we can use to scroll the map
 scrolling = true
 
+local spawnTimer = 0
+
 function love.load()
     -- initialize our nearest-neighbor filter
     love.graphics.setDefaultFilter('nearest', 'nearest')
