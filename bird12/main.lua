@@ -164,8 +164,9 @@ function love.update(dt)
     
     spawnTimer = spawnTimer + dt
     
-    if spawnTimer > math.random(2,5)
+    if spawnTimer > math.random(2,5) then
         table.insert(pipes, Pipe())
+        spawnTimer = 0
     end
 
     gStateMachine:update(dt)
