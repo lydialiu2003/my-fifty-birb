@@ -64,10 +64,10 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 
+local spawnTimer = 0
+
 -- global variable we can use to scroll the map
 scrolling = true
-
-local spawnTimer = 0
 
 function love.load()
     -- initialize our nearest-neighbor filter
@@ -165,11 +165,19 @@ function love.update(dt)
     spawnTimer = spawnTimer + dt
     
     if spawnTimer > math.random(2,5) then
-            table.insert(pipes, Pipe())
-            spawnTimer = 0
+        table.insert(pipes, Pipe())
+        spawnTimer = 0
     end    
     
     gStateMachine:update(dt)
+    
+    for k, pipe in pairs(pipes) do
+        pipe:update(dt)
+        
+        if pipe.x < -pipe.width then
+            table.remove(pipes, k)
+        end
+    end
     
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
