@@ -1,8 +1,7 @@
+  
 --[[
     GD50 2018
     Flappy Bird Remake
-    bird12
-    "The Mouse Update"
     Author: Colton Ogden
     cogden@cs50.harvard.edu
     A mobile game by Dong Nguyen that went viral in 2013, utilizing a very simple 
@@ -32,11 +31,13 @@ Class = require 'class'
 -- game states smoothly and avoid monolithic code in one file
 require 'StateMachine'
 
+-- all states our StateMachine can transition between
 require 'states/BaseState'
 require 'states/CountdownState'
 require 'states/PlayState'
 require 'states/ScoreState'
 require 'states/TitleScreenState'
+require 'states/PauseState'
 
 require 'Bird'
 require 'Pipe'
@@ -61,9 +62,7 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 
--- global variable we can use to scroll the map
-scrolling = true
-
+scrolling  = true
 function love.load()
     -- initialize our nearest-neighbor filter
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -89,7 +88,7 @@ function love.load()
         ['score'] = love.audio.newSource('score.wav', 'static'),
 
         -- https://freesound.org/people/xsgianni/sounds/388079/
-        ['music'] = love.audio.newSource('toby fox - UNDERTALE Soundtrack - 18 Uwa!! So Holiday♫.mp3', 'static')
+        ['music'] = love.audio.newSource('marios_way.mp3', 'static')
     }
 
     -- kick off music
@@ -108,7 +107,8 @@ function love.load()
         ['title'] = function() return TitleScreenState() end,
         ['countdown'] = function() return CountdownState() end,
         ['play'] = function() return PlayState() end,
-        ['score'] = function() return ScoreState() end
+        ['score'] = function() return ScoreState() end,
+        ['pause'] = function() return PauseState() end
     }
     gStateMachine:change('title')
 
@@ -140,6 +140,10 @@ function love.mousepressed(x, y, button)
     love.mouse.buttonsPressed[button] = true
 end
 
+--[[
+    Custom function to extend LÖVE's input handling; returns whether a given
+    key was set to true in our input table this frame.
+]]
 function love.keyboard.wasPressed(key)
     return love.keyboard.keysPressed[key]
 end
@@ -152,9 +156,10 @@ function love.mouse.wasPressed(button)
 end
 
 function love.update(dt)
+    -- scroll our background and ground, looping back to 0 after a certain amount
     if scrolling then
-        backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
-        groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
+    backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+    groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
     end
 
     gStateMachine:update(dt)
