@@ -171,14 +171,6 @@ function love.update(dt)
     
     gStateMachine:update(dt)
     
-    for k, pipe in pairs(pipes) do
-        pipe:update(dt)
-        
-        if pipe.x < -pipe.width then
-                table.remove(pipes, k)
-        end
-    end
-    
     love.keyboard.keysPressed = {}
     love.mouse.buttonsPressed = {}
 end
