@@ -92,7 +92,7 @@ function love.load()
         ['score'] = love.audio.newSource('score.wav', 'static'),
 
         -- https://freesound.org/people/xsgianni/sounds/388079/
-        ['music'] = love.audio.newSource('HAMILTON Non-stop.mp3', 'static')
+        ['music'] = love.audio.newSource('HAMILTON_non-stop.mp3', 'static')
     }
 
     -- kick off music
