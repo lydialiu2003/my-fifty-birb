@@ -179,9 +179,8 @@ function love.draw()
     push:start()
     
     love.graphics.draw(background, -backgroundScroll, 0)
-    
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
-        
+    
     push:finish()
 end
