@@ -180,10 +180,6 @@ function love.draw()
     
     love.graphics.draw(background, -backgroundScroll, 0)
     
-    for k, pipe in pairs(pipes) do
-        pipe:render()
-    end
-    
     gStateMachine:render()
     love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
     
